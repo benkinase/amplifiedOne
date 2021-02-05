@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const PetContext = createContext();
 
 const PetContextProvider = (props) => {
-  //initialise state for local storage
+  //initialize state for local storage
   const initState = JSON.parse(localStorage.getItem("pets")) || [];
   const [pets, setPets] = useState(initState);
 
