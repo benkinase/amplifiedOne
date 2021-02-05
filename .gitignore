@@ -24,6 +24,7 @@ yarn-error.log*
 node_modules
 ./src/conte
 Makefile
+.vscode
 
 #amplify
 amplify/\#current-cloud-backend
