@@ -5,7 +5,7 @@ function Navbar() {
   //const { pets } = useContext(PetContext);
   return (
     <div className='navbar center'>
-      <h1>Pet collection</h1>
+      <h1>This is AmplifiedOne</h1>
       <p>Current number of pets: {"pets.length"}</p>
     </div>
   );
