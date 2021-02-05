@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar";
 
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import { API } from "aws-amplify";
+import { API, Storage } from "aws-amplify";
 import { withAuthenticator, AmplifySignOut } from "@aws-amplify/ui-react";
 import { listItems } from "./graphql/queries";
 import {
@@ -22,6 +22,16 @@ function App() {
 
   async function fetchItems() {
     const apiData = await API.graphql({ query: listItems });
+    const itemsFromAPI = apiData.data.listItems.items;
+    await Promise.all(
+      itemsFromAPI.map(async (item) => {
+        if (item.image) {
+          const image = await Storage.get(item.image);
+          item.image = image;
+        }
+        return item;
+      })
+    );
     setItems(apiData.data.listItems.items);
   }
 
@@ -32,6 +42,10 @@ function App() {
       query: createItemMutation,
       variables: { input: formData },
     });
+    if (formData.image) {
+      const image = await Storage.get(formData.image);
+      formData.image = image;
+    }
     setItems([...items, formData]);
     setFormData(initialFormState);
   }
@@ -43,6 +57,13 @@ function App() {
       query: deleteItemMutation,
       variables: { input: { id } },
     });
+  }
+  async function onChange(e) {
+    if (!e.target.files[0]) return;
+    const file = e.target.files[0];
+    setFormData({ ...formData, image: file.name });
+    await Storage.put(file.name, file);
+    fetchItems();
   }
 
   return (
@@ -62,6 +83,7 @@ function App() {
         value={formData.description}
         style={{ color: "black" }}
       />
+      <input type='file' onChange={onChange} />
       <button onClick={createItem}>Create Note</button>
       <div style={{ marginBottom: 30 }}>
         {items.map((item) => (
@@ -69,6 +91,7 @@ function App() {
             <h2>{item.name}</h2>
             <p>{item.description}</p>
             <button onClick={() => deleteItem(item)}>Delete item</button>
+            {item.image && <img src={item.image} style={{ width: 400 }} />}
           </div>
         ))}
       </div>
