@@ -84,7 +84,7 @@ function App() {
         style={{ color: "black" }}
       />
       <input type='file' onChange={onChange} />
-      <button onClick={createItem}>Create Note</button>
+      <button onClick={createItem}>Create item</button>
       <div style={{ marginBottom: 30 }}>
         {items.map((item) => (
           <div key={item.id || item.name}>
@@ -95,10 +95,10 @@ function App() {
           </div>
         ))}
       </div>
-      {/* <AmplifySignOut /> */}
+      <AmplifySignOut />
     </div>
   );
 }
 
-export default App;
-//export default withAuthenticator(App);
+//export default App;
+export default withAuthenticator(App);

@@ -3,3 +3,7 @@
   margin: auto;
   color: rgb(3, 12, 39);
 }
+button {
+  padding: 10px;
+  cursor: pointer;
+}
